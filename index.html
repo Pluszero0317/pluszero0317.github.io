@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!--
+  ╔════════════════════════════════════════════════════╗
+  ║   ✎  要新增 / 修改連結，只需要改下面這一段            ║
+  ╚════════════════════════════════════════════════════╝
+-->
+<script>
+const PROFILE = {
+  name: "Zerø_",          // 左上角小字
+  title: "Zero",           // 自介上方的大標
+  bio:  "∅ = ∞",
+  // 聯絡信箱：顯示在自介下面，點了會開 Gmail 寫信、收件人自動填好。不想顯示就留 ""
+  email: "plus.zeeroo@gmail.com",
+  // 短自介：會顯示在連結上方，第一段是亮色、其餘較暗。
+  // 中英對照寫成 ["中文", "English"]；只有一種語言就直接寫 "文字"。不想顯示就留空 []
+  intro: [
+    ["遊戲與互動設計師，在虛擬世界與現實感知的交界，創作即時互動的體驗",
+     "Game & interactive designer, crafting real-time experiences where virtual worlds meet real perception."],
+    ["在實踐中實驗，做點好玩又好強的東西吧",
+     "Experiment in practice — let's make things both playful and powerful."],
+    "Unreal Engine / TouchDesigner / Unity / Arduino",
+  ],
+};
+
+// 每一行是一個連結：
+//   title：顯示的名字（直接打英文就好，會自動轉大寫、包上 ｛ ｝；也可以打中文）
+//   note ：右邊的小說明（不想要就留 ""）
+//   url  ：網址。Email 寫成 "mailto:你的信箱"；還沒有網址就寫 "#"（會顯示為待補）
+//
+// 新增：複製一整行，貼在想要的位置，改內容（每行結尾的逗號要留著）
+// 刪除：整行刪掉
+// 暫時隱藏：在那行最前面加 //
+// 排序：直接上下搬動整行
+const LINKS = [
+  { title: "LinkedIn",   note: "pluszerooo",          url: "https://www.linkedin.com/in/pluszerooo" },
+  { title: "Nexus",      note: "線上共生生物創作",     url: "https://emergencenexus.vercel.app" },
+  { title: "Dazhi",      note: "大直吃喝",             url: "https://pluszero0317.github.io/Dazhi-food/" },
+  // { title: "Work",       note: "作品集",               url: "#" },
+];
+</script>
+<!-- ═════════════════ 以下不用動 ═════════════════ -->
+
+<title>Zerø_</title>
+<meta name="description" content="∅ = ∞">
+<meta name="theme-color" content="#11111b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2311111b'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23b8f53d' stroke-width='4'/%3E%3Cline x1='18' y1='50' x2='46' y2='14' stroke='%23b8f53d' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#11111b;
+    --fg:#e9e9f1;
+    --dim:#7c7c92;
+    --line:rgba(233,233,241,.12);
+    --lime:#b8f53d;
+    --magenta:#e2459a;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans:"Noto Sans TC", system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg)}
+  body{
+    font-family:var(--mono);
+    min-height:100svh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+  }
+  ::selection{background:var(--lime);color:var(--bg)}
+
+  .page{
+    position:relative;z-index:1;
+    max-width:560px;margin:0 auto;
+    padding:22px 20px calc(28px + env(safe-area-inset-bottom));
+    min-height:100svh;
+    display:flex;flex-direction:column;
+  }
+
+  header{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  header .name, header .bio{font-weight:400;font-size:12px;letter-spacing:.2em;color:var(--dim)}
+
+  .title{
+    margin-top:min(14svh,120px);
+    display:flex;justify-content:center;
+    font-weight:300;font-size:clamp(44px,13vw,72px);line-height:1;
+    min-height:88px;
+  }
+  .title canvas{display:block;cursor:default}
+  .title .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  .intro{
+    margin-top:36px;
+    font-family:var(--sans);font-weight:300;font-size:14px;line-height:1.9;
+    color:var(--fg);letter-spacing:.02em;
+    text-align:center;text-wrap:balance;
+  }
+  .intro p{margin-bottom:.9em}
+  .intro p:last-child{margin-bottom:0}
+  .intro p + p{font-size:13px;line-height:1.8;color:var(--dim)}
+  .intro .en{display:block;font-size:.86em;line-height:1.7;opacity:.62;margin-top:.15em;letter-spacing:.01em}
+  .intro p + p .en{opacity:.8}
+  .intro:empty{display:none}
+  .contact{
+    display:flex;justify-content:center;margin-top:22px;
+  }
+  .contact a{
+    display:inline-flex;align-items:baseline;gap:.7em;
+    padding:10px 18px;border:1px solid var(--line);border-radius:999px;
+    color:var(--fg);text-decoration:none;font-size:12px;letter-spacing:.06em;
+    transition:border-color .3s, color .3s, background .3s, transform .15s;
+  }
+  .contact .k{color:var(--dim);font-family:var(--sans);letter-spacing:.1em;transition:color .3s}
+  .contact .ar{color:var(--dim);transition:transform .3s, color .3s}
+  .contact a:hover, .contact a:focus-visible{border-color:var(--lime);color:var(--lime);outline:none}
+  .contact a:hover .k, .contact a:hover .ar, .contact a:focus-visible .ar{color:var(--lime)}
+  .contact a:hover .ar{transform:translate(2px,-2px)}
+  .contact a:active{transform:scale(.97);background:rgba(184,245,61,.08)}
+  .contact a.sent{border-color:var(--lime);color:var(--bg);background:var(--lime)}
+  .contact a.sent .k, .contact a.sent .ar{color:var(--bg)}
+  .contact:empty{display:none}
+  nav{margin-top:min(22svh,180px)}
+  .contact:not(:empty) + nav{margin-top:44px}
+  ul.set{list-style:none}
+
+  .set li{
+    border-top:1px solid var(--line);
+    opacity:0;transform:translateY(10px);
+    transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1);
+    transition-delay:calc(var(--i) * 70ms + 150ms);
+  }
+  .set li:last-child{border-bottom:1px solid var(--line)}
+  body.bloomed .set li{opacity:1;transform:none}
+
+  .row{
+    display:grid;grid-template-columns:auto auto 1fr auto;
+    align-items:baseline;gap:14px;
+    padding:17px 4px;
+    color:inherit;text-decoration:none;
+    outline:none;
+  }
+  .in{font-size:12px;color:var(--dim)}
+  .label{font-size:16px;white-space:nowrap;display:inline-flex;align-items:baseline}
+  .word{margin:0 .5em;text-transform:uppercase;letter-spacing:.14em;font-weight:400;transition:color .35s ease}
+  .br{display:inline-block;color:var(--dim);transition:transform .4s cubic-bezier(.2,.8,.2,1), color .4s}
+  .note{
+    font-family:var(--sans);font-weight:300;font-size:12px;color:var(--dim);
+    text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;
+  }
+  .arrow{font-size:13px;color:var(--dim);transition:transform .4s cubic-bezier(.2,.8,.2,1), color .4s}
+
+  a.row:hover .word, a.row:focus-visible .word{color:var(--lime)}
+  a.row:hover .br.l, a.row:focus-visible .br.l{transform:translateX(-7px);color:var(--lime)}
+  a.row:hover .br.r, a.row:focus-visible .br.r{transform:translateX(7px);color:var(--lime)}
+  a.row:hover .arrow, a.row:focus-visible .arrow{transform:translate(3px,-3px);color:var(--lime)}
+  a.row:focus-visible{box-shadow:inset 2px 0 0 var(--lime)}
+  a.row:active .word{color:var(--magenta)}
+
+  .row.pending{cursor:default}
+  .row.pending .word{color:var(--dim)}
+  .row.pending .note::after{content:" · 待補";opacity:.6}
+
+
+  @media (min-width:700px){
+    .page{padding-top:32px}
+    .label{font-size:17px}
+    .row{padding:19px 6px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .set li,.br,.arrow,.word{transition:none}
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <span class="name" id="name"></span>
+      <span class="bio" id="bio"></span>
+    </header>
+
+    <h1 class="title" id="title"></h1>
+
+    <section class="intro" id="intro"></section>
+    <div class="contact" id="contact"></div>
+
+    <nav aria-label="連結">
+      <ul class="set" id="set"></ul>
+    </nav>
+  </div>
+
+<script>
+(() => {
+  /* ---------- 內容 ---------- */
+  const nameEl = document.getElementById('name');
+  nameEl.textContent = PROFILE.name;
+  document.getElementById('bio').textContent = PROFILE.bio;
+  /* ---------- 大標：像素點陣 × 符號解碼 ---------- */
+  (() => {
+    const TITLE = PROFILE.title || PROFILE.name;
+    const el = document.getElementById('title');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const POOL = '∅∞∈∉{}ø0/#+=<>|≠';
+    const ROWS = 15, FONT = '700 ' + ROWS + 'px "JetBrains Mono", ui-monospace, monospace';
+
+    el.innerHTML = '<span class="sr"></span>';
+    el.querySelector('.sr').textContent = TITLE;
+    const cvs = document.createElement('canvas');
+    cvs.setAttribute('aria-hidden', 'true');
+    el.appendChild(cvs);
+    const ctx = cvs.getContext('2d');
+    const off = document.createElement('canvas'), o = off.getContext('2d', { willReadFrequently: true });
+
+    const n = [...TITLE].length;
+    let cols, rows, charW, cell = 5, W = 0, H = 0;
+    let val, tgt, hot, tw;
+    let shown = [...TITLE], ends = null, t0 = 0, lastSwap = 0;
+    let mx = -1e4, my = -1e4;
+
+    function setup() {
+      o.font = FONT;
+      charW = Math.ceil(o.measureText('M').width);
+      cols = charW * n + 2; rows = ROWS + 4;
+      off.width = cols; off.height = rows;
+      if (!val) {
+        val = new Float32Array(cols * rows); tgt = new Float32Array(cols * rows);
+        hot = new Float32Array(cols * rows); tw = new Float32Array(cols * rows);
+      }
+      layout();
+    }
+    function layout() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const maxW = Math.min(el.parentElement.clientWidth, 520);
+      cell = Math.max(3, Math.min(Math.floor(maxW / cols), Math.round(88 / rows)));
+      W = cols * cell; H = rows * cell;
+      cvs.width = W * dpr; cvs.height = H * dpr;
+      cvs.style.width = W + 'px'; cvs.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function raster(chars) {
+      o.clearRect(0, 0, cols, rows);
+      o.font = FONT; o.textBaseline = 'top'; o.fillStyle = '#fff';
+      chars.forEach((c, i) => {
+        const w = o.measureText(c).width;
+        const sc = w > charW ? charW / w : 1;           // 太寬的符號縮進同一格
+        o.save(); o.translate(1 + i * charW + (charW - w * sc) / 2, 2); o.scale(sc, 1);
+        o.fillText(c, 0, 0); o.restore();
+      });
+      const d = o.getImageData(0, 0, cols, rows).data;
+      for (let k = 0; k < tgt.length; k++) tgt[k] = d[k * 4 + 3] > 110 ? 1 : 0;
+    }
+
+    function decode() {
+      if (reduce) return;
+      if (ends && performance.now() - t0 < Math.max(...ends)) return;   // 正在解碼就不重來
+      t0 = performance.now();
+      ends = shown.map((_, i) => 420 + i * 190 + Math.random() * 140);
+    }
+
+    function frame(now) {
+      let decoding = false;
+      if (ends) {
+        const t = now - t0;
+        if (now - lastSwap > 55) {
+          lastSwap = now;
+          shown = [...TITLE].map((c, i) => t < ends[i] ? POOL[(Math.random() * POOL.length) | 0] : c);
+          raster(shown);
+        }
+        decoding = ends.some(e => t < e);
+        if (!decoding) { ends = null; shown = [...TITLE]; raster(shown); }
+      }
+
+      ctx.clearRect(0, 0, W, H);
+      const r = cvs.getBoundingClientRect(), px = mx - r.left, py = my - r.top;
+      const glitch = decoding && Math.random() < .4;
+      const b0 = (Math.random() * rows) | 0, b1 = b0 + 2 + ((Math.random() * 4) | 0);
+      const shift = glitch ? (Math.random() - .5) * cell * 3 : 0;
+      const gap = Math.max(1, cell * .16), sz = cell - gap;
+
+      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+        const k = y * cols + x;
+        val[k] += (tgt[k] - val[k]) * (reduce ? 1 : .32);
+        const v = val[k];
+        if (v < .04) continue;
+        const cx = x * cell + cell / 2 - px, cy = y * cell + cell / 2 - py;
+        const near = Math.max(0, 1 - Math.sqrt(cx * cx + cy * cy) / (cell * 9));
+        hot[k] += (near - hot[k]) * .2;
+        if (tw[k] > 0) tw[k] -= .03; else if (!reduce && Math.random() < .0016) tw[k] = 1;
+
+        const dx = (y >= b0 && y < b1) ? shift : 0;
+        const X = x * cell + gap / 2 + dx, Y = y * cell + gap / 2;
+        if (glitch) {
+          ctx.fillStyle = 'rgba(226,69,154,' + (.45 * v) + ')'; ctx.fillRect(X - cell * .6, Y, sz, sz);
+          ctx.fillStyle = 'rgba(184,245,61,' + (.45 * v) + ')'; ctx.fillRect(X + cell * .6, Y, sz, sz);
+        }
+        const lime = Math.max(hot[k], tw[k]);
+        ctx.fillStyle =
+          tw[k] > .5 && x % 3 === 0 ? 'rgba(226,69,154,' + (.5 + tw[k] / 2) * v + ')' :
+          lime > .05 ? 'rgba(184,245,61,' + (.35 + lime * .65) * v + ')' :
+          decoding && Math.random() < .05 ? 'rgba(124,124,146,' + v + ')' :
+          'rgba(233,233,241,' + .92 * v + ')';
+        ctx.fillRect(X, Y, sz, sz);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    document.addEventListener('pointerleave', () => { mx = my = -1e4; });
+    cvs.addEventListener('pointerenter', decode);
+    cvs.addEventListener('pointerdown', decode);
+    addEventListener('resize', () => { if (val) layout(); });
+
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+      setup();
+      shown = [...TITLE]; raster(shown);
+      if (reduce) { val.set(tgt); }
+      else { tgt.fill(0); decode(); setInterval(decode, 8000); }
+      requestAnimationFrame(frame);
+    });
+  })();
+  document.title = PROFILE.name + '  ' + PROFILE.bio;
+
+  const intro = document.getElementById('intro');
+  (PROFILE.intro || []).filter(Boolean).forEach(t => {
+    const [zh, en] = Array.isArray(t) ? t : [t];
+    const p = document.createElement('p');
+    p.textContent = zh;
+    if (en) { const e = document.createElement('span'); e.className = 'en'; e.lang = 'en'; e.textContent = en; p.appendChild(e); }
+    intro.appendChild(p);
+  });
+
+  if (PROFILE.email) {
+    const box = document.getElementById('contact');
+    const a = document.createElement('a');
+    a.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(PROFILE.email);
+    a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', '用 Gmail 寫信給 ' + PROFILE.email);
+    a.innerHTML = '<span class="k">聯絡我</span><span class="m"></span><span class="ar">↗</span>';
+    const m = a.querySelector('.m');
+    m.textContent = PROFILE.email;
+    a.addEventListener('click', () => {
+      a.classList.add('sent'); m.textContent = '開啟 Gmail…';
+      setTimeout(() => { a.classList.remove('sent'); m.textContent = PROFILE.email; }, 1800);
+    });
+    box.appendChild(a);
+  }
+
+  const list = document.getElementById('set');
+  LINKS.forEach((l, i) => {
+    const li = document.createElement('li');
+    li.style.setProperty('--i', i);
+    const pending = !l.url || l.url === '#';
+    const row = document.createElement(pending ? 'div' : 'a');
+    row.className = 'row' + (pending ? ' pending' : '');
+    if (!pending) {
+      row.href = l.url;
+      if (/^https?:/i.test(l.url)) { row.target = '_blank'; row.rel = 'noopener'; }
+    }
+    row.innerHTML =
+      '<span class="in">∈</span>' +
+      '<span class="label"><span class="br l">｛</span><span class="word"></span><span class="br r">｝</span></span>' +
+      '<span class="note"></span>' +
+      '<span class="arrow">' + (pending ? '·' : '↗') + '</span>';
+    row.querySelector('.word').textContent = l.title;
+    row.querySelector('.note').textContent = l.note || '';
+    if (l.note) row.setAttribute('aria-label', l.title + '，' + l.note);
+    li.appendChild(row);
+    list.appendChild(li);
+  });
+
+  requestAnimationFrame(() => document.body.classList.add('bloomed'));
+})();
+</script>
+</body>
+</html>
